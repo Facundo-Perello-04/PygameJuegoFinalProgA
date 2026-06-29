@@ -103,9 +103,9 @@ class Bala(pygame.sprite.Sprite):
 class Enemigo(pygame.sprite.Sprite):
     """Asteroide que cae desde la parte superior en una posición X aleatoria."""
 
-    VELOCIDAD_MIN = 2   # ← MODIFICAR AQUÍ PARA QUE LOS ENEMIGOS CAIGAN MÁS LENTO (valor mínimo)
-    VELOCIDAD_MAX = 5   # ← MODIFICAR AQUÍ PARA QUE LOS ENEMIGOS CAIGAN MÁS RÁPIDO (valor máximo)
-    TAMANIO       = 36  # ← MODIFICAR AQUÍ PARA CAMBIAR EL TAMAÑO DE LOS ASTEROIDES
+    VELOCIDAD_MIN = 2   # ← ENEMIGOS CAIGAN MÁS LENTO (valor mínimo)
+    VELOCIDAD_MAX = 5   # ← ENEMIGOS CAIGAN MÁS RÁPIDO (valor máximo)
+    TAMANIO       = 36  # ← TAMAÑO DE LOS ASTEROIDES
 
     def __init__(self):
         super().__init__()
@@ -130,10 +130,9 @@ class Enemigo(pygame.sprite.Sprite):
             self.kill()
 
 
-# ─────────────────────────────────────────────
 #  FUNCIÓN: dibujar_estrellas
 #  Fondo con estrellas estáticas (decorativo).
-# ─────────────────────────────────────────────
+
 def crear_estrellas(cantidad=80):
     """Genera una lista de posiciones y tamaños para las estrellas del fondo."""
     return [
@@ -148,19 +147,19 @@ def dibujar_estrellas(pantalla, estrellas):
         pygame.draw.circle(pantalla, (200, 200, 200), (x, y), tam)
 
 
-# ─────────────────────────────────────────────
-#  FUNCIÓN: mostrar_hud
+
+#  mostrar_hud
 #  Muestra el puntaje y las vidas en pantalla.
-# ─────────────────────────────────────────────
+
 def mostrar_hud(pantalla, fuente, puntaje):
     texto = fuente.render(f"PUNTAJE: {puntaje}", True, COLOR_TITULO)
     pantalla.blit(texto, (10, 10))
 
 
-# ─────────────────────────────────────────────
-#  FUNCIÓN: pantalla_game_over
+
+#  pantalla_game_over
 #  Muestra el puntaje final y espera input del jugador.
-# ─────────────────────────────────────────────
+
 def pantalla_game_over(pantalla, fuente_grande, fuente_chica, puntaje):
     """Bloquea el loop principal y muestra la pantalla de Game Over."""
     pantalla.fill(COLOR_FONDO)
@@ -186,10 +185,8 @@ def pantalla_game_over(pantalla, fuente_grande, fuente_chica, puntaje):
                     return False   # Salir
 
 
-# ─────────────────────────────────────────────
-#  FUNCIÓN: iniciar_juego
+#  iniciar_juego
 #  Crea y devuelve todos los objetos del juego desde cero.
-# ─────────────────────────────────────────────
 def iniciar_juego():
     """Instancia al jugador y todos los grupos de sprites. Permite reiniciar limpiamente."""
     jugador      = Jugador()
@@ -202,9 +199,8 @@ def iniciar_juego():
     return jugador, grupo_todo, grupo_balas, grupo_enemigos
 
 
-# ─────────────────────────────────────────────
 #  LOOP PRINCIPAL
-# ─────────────────────────────────────────────
+
 def main():
     pygame.init()
     pantalla = pygame.display.set_mode((ANCHO_PANTALLA, ALTO_PANTALLA))
@@ -216,9 +212,9 @@ def main():
 
     estrellas = crear_estrellas()
 
-    # ─── Variables del juego ─────────────────
-    INTERVALO_SPAWN = 60   # ← MODIFICAR AQUÍ PARA CAMBIAR CADA CUÁNTOS FRAMES APARECE UN ENEMIGO (menor = más frecuente)
-    PUNTOS_POR_ENEMIGO = 10  # ← MODIFICAR AQUÍ PARA CAMBIAR CUÁNTOS PUNTOS DA CADA ENEMIGO
+    # Variables del juego 
+    INTERVALO_SPAWN = 60   # ← FRAMES ENEMIGO (menor = más frecuente)
+    PUNTOS_POR_ENEMIGO = 10  # ← PUNTOS POR ENEMIGO
 
     jugando = True
     while jugando:   # Loop externo: permite reiniciar el juego
@@ -232,7 +228,7 @@ def main():
             reloj.tick(FPS)
             frame += 1
 
-            # ─── Eventos ─────────────────────
+            # Eventos
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT:
                     jugando = False
@@ -244,36 +240,36 @@ def main():
                         grupo_balas.add(bala)
                         grupo_todo.add(bala)
 
-            # ─── Spawner de enemigos ──────────
+            # Spawn de enemigos 
             if frame % INTERVALO_SPAWN == 0:
                 enemigo = Enemigo()
                 grupo_enemigos.add(enemigo)
                 grupo_todo.add(enemigo)
 
-            # ─── Actualización ───────────────
+            # Actualización 
             teclas = pygame.key.get_pressed()
             jugador.update(teclas)
             grupo_balas.update()
             grupo_enemigos.update()
 
-            # ─── Colisiones: bala vs enemigo ─
+            # Colisiones
             colisiones = pygame.sprite.groupcollide(
                 grupo_balas, grupo_enemigos, True, True   # True, True = elimina ambos sprites
             )
             puntaje += len(colisiones) * PUNTOS_POR_ENEMIGO
 
-            # ─── Colisión: enemigo vs jugador ─
+        
             if pygame.sprite.spritecollide(jugador, grupo_enemigos, False):
                 partida_activa = False   # Game Over
 
-            # ─── Dibujo ──────────────────────
+            # Dibujo
             pantalla.fill(COLOR_FONDO)
             dibujar_estrellas(pantalla, estrellas)
             grupo_todo.draw(pantalla)
             mostrar_hud(pantalla, fuente_chica, puntaje)
             pygame.display.flip()
 
-        # ─── Fin de partida ──────────────────
+        # Fin de partida 
         if jugando:
             reiniciar = pantalla_game_over(pantalla, fuente_grande, fuente_chica, puntaje)
             jugando = reiniciar
@@ -281,8 +277,6 @@ def main():
     pygame.quit()
 
 
-# ─────────────────────────────────────────────
 #  PUNTO DE ENTRADA
-# ─────────────────────────────────────────────
 if __name__ == "__main__":
     main()
