@@ -1,21 +1,14 @@
-# =============================================================
-#  SECTOR 7 — Shooter Espacial Vertical 2D
-#  Archivo único, sin dependencias externas.
-#  Autor: Facundo Perello
-# =============================================================
-
 import pygame
 import random
 
-# ─────────────────────────────────────────────
 #  CONFIGURACIÓN GLOBAL DEL JUEGO
 #  Modificar estas constantes cambia el juego entero.
-# ─────────────────────────────────────────────
+
 ANCHO_PANTALLA  = 600          # Ancho de la ventana en píxeles
 ALTO_PANTALLA   = 700          # Alto  de la ventana en píxeles
 FPS             = 60           # Fotogramas por segundo
 
-# Colores (R, G, B) — sin imágenes externas
+# Colores (R, G, B)
 COLOR_FONDO      = (5,   5,  20)   # Azul muy oscuro, estilo espacio
 COLOR_JUGADOR    = (0,  220, 80)   # Verde brillante
 COLOR_ENEMIGO    = (220,  40, 40)  # Rojo intenso
@@ -23,14 +16,14 @@ COLOR_BALA       = (255, 230, 50)  # Amarillo
 COLOR_TEXTO      = (255, 255, 255) # Blanco
 COLOR_TITULO     = (80,  200, 255) # Azul cielo para HUD
 
-# ─────────────────────────────────────────────
+
 #  CLASE: Jugador
-# ─────────────────────────────────────────────
+
 class Jugador(pygame.sprite.Sprite):
     """Nave del jugador. Se mueve en el eje X con las flechas."""
 
-    VELOCIDAD      = 5     # ← MODIFICAR AQUÍ SI EL PROFESOR PIDE CAMBIAR LA VELOCIDAD DE LA NAVE
-    CADENCIA       = 20    # ← MODIFICAR AQUÍ PARA LA CADENCIA DE DISPARO (fotogramas entre disparos; menor = más rápido)
+    VELOCIDAD      = 5     #  Velocidad nave
+    CADENCIA       = 20    #  Cadencia de disparo (fotogramas entre disparos; menor = más rápido)
     ANCHO_SPRITE   = 50
     ALTO_SPRITE    = 40
 
@@ -79,9 +72,8 @@ class Jugador(pygame.sprite.Sprite):
         return Bala(self.rect.centerx, self.rect.top)
 
 
-# ─────────────────────────────────────────────
 #  CLASE: Bala
-# ─────────────────────────────────────────────
+
 class Bala(pygame.sprite.Sprite):
     """Proyectil disparado por el jugador. Sube recto."""
 
